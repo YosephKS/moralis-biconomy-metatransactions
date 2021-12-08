@@ -26,6 +26,7 @@ yarn.lock
 
 node_modules
 .env
+.secret
 coverage
 coverage.json
 typechain

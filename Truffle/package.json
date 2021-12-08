@@ -1,0 +1,21 @@
+{
+  "name": "moralis-biconomy-metatransactions-contracts",
+  "version": "1.0.0",
+  "main": "truffle-config.js",
+  "license": "MIT",
+  "dependencies": {
+    "@opengsn/contracts": "^2.2.4",
+    "truffle-plugin-verify": "^0.5.18"
+  },
+  "scripts": {
+    "compile": "truffle compile",
+    "migrate": "truffle migrate",
+    "test": "truffle test",
+    "console": "truffle console",
+    "verify": "truffle run verify SimpleStorage"
+  },
+  "devDependencies": {
+    "@truffle/hdwallet-provider": "^2.0.0",
+    "dotenv": "^10.0.0"
+  }
+}
