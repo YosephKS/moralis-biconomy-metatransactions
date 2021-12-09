@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, useEffect, useState, useMemo } from "react";
 import { useChain, useMoralis } from "react-moralis";
 import { Biconomy } from "@biconomy/mexa";
@@ -5,6 +6,7 @@ import Web3 from "web3";
 import { networkConfigs } from "helpers/networks";
 import simpleStorageContract from "contracts/SimpleStorage.json";
 import simpleStorage from "list/simpleStorage.json";
+import biconomyApiKey from "helpers/biconomy";
 
 export const BiconomyContext = createContext({});
 
@@ -16,6 +18,7 @@ const BiconomyContextProvider = (props) => {
     isAuthenticated,
     isWeb3EnableLoading,
     enableWeb3,
+    Moralis,
   } = useMoralis();
   const { chainId } = useChain();
   const [isBiconomyInitialized, setIsBiconomyInitialized] = useState(false);
@@ -25,15 +28,25 @@ const BiconomyContextProvider = (props) => {
   const contractAddress = useMemo(() => simpleStorage[chainId], [chainId]);
 
   useEffect(() => {
+    if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading && chainId) {
+      enableWeb3();
+    }
+  }, [isAuthenticated, isWeb3Enabled, chainId]);
+
+  useEffect(() => {
     const initializeBiconomy = async () => {
-      await enableWeb3();
+      if (isBiconomyInitialized) {
+        // Resetting when reinitializing
+        setIsBiconomyInitialized(false);
+      }
+
+      const walletWeb3 = await Moralis.enableWeb3();
       const networkProvider = new Web3.providers.HttpProvider(
         networkConfigs[chainId]?.rpcUrl
       );
       const biconomy = new Biconomy(networkProvider, {
-        walletProvider: window.ethereum,
-        apiKey: process.env.REACT_APP_BICONOMY_API_KEY,
-        debug: true,
+        walletProvider: walletWeb3.currentProvider,
+        apiKey: biconomyApiKey[chainId],
       });
       setBiconomyProvider(biconomy);
 
@@ -51,11 +64,18 @@ const BiconomyContextProvider = (props) => {
         });
     };
 
-    if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading && chainId) {
+    if (isAuthenticated && isWeb3Enabled && chainId) {
       initializeBiconomy();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated, isWeb3Enabled, chainId]);
+  }, [
+    isAuthenticated,
+    isWeb3Enabled,
+    chainId,
+    web3,
+    abi,
+    contractAddress,
+    Moralis,
+  ]);
 
   return (
     <BiconomyContext.Provider
