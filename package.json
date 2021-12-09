@@ -1,6 +1,6 @@
 {
   "name": "moralis-biconomy-metatransactions",
-  "homepage": "https://github.com/YosephKS/moralis-biconomy-metatransactions",
+  "license": "GPL-3.0-or-later",
   "version": "0.1.0",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
@@ -25,6 +25,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "serve": "serve -s build",
     "devchain": "node Truffle/scripts/devChain.js",
     "connect": "moralis-admin-cli connect-local-devchain",
     "watch:events": "moralis-admin-cli add-contract",

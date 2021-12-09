@@ -123,6 +123,19 @@ module.exports = {
       timeoutBlocks: 200,
       skipDryRun: true,
     },
+    polygon_mainnet: {
+      provider: () =>
+        new HDWalletProvider(
+          mnemonic,
+          `https://speedy-nodes-nyc.moralis.io/${
+            process.env.MORALIS_SPEEDY_NODES_KEY
+          }/polygon/mainnet${process.env.ARCHIVE === true ? "/archive" : ""}`
+        ),
+      network_id: 137,
+      confirmations: 3,
+      timeoutBlocks: 200,
+      skipDryRun: true,
+    },
     arbitrum_rinkeby: {
       provider: () =>
         new HDWalletProvider(
@@ -139,19 +152,6 @@ module.exports = {
           `https://speedy-nodes-nyc.moralis.io/${process.env.MORALIS_SPEEDY_NODES_KEY}/arbitrum/mainnet`
         ),
       network_id: 42161,
-      skipDryRun: true,
-    },
-    polygon_mainnet: {
-      provider: () =>
-        new HDWalletProvider(
-          mnemonic,
-          `https://speedy-nodes-nyc.moralis.io/${
-            process.env.MORALIS_SPEEDY_NODES_KEY
-          }/polygon/mainnet${process.env.ARCHIVE === true ? "/archive" : ""}`
-        ),
-      network_id: 137,
-      confirmations: 3,
-      timeoutBlocks: 200,
       skipDryRun: true,
     },
     avalanche_fuji: {

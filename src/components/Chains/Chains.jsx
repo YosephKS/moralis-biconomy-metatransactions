@@ -22,39 +22,9 @@ const styles = {
 
 const menuItems = [
   {
-    key: "0x1",
-    value: "Ethereum",
-    icon: <ETHLogo />,
-  },
-  {
-    key: "0x539",
-    value: "Local Chain",
-    icon: <ETHLogo />,
-  },
-  {
-    key: "0x3",
-    value: "Ropsten Testnet",
-    icon: <ETHLogo />,
-  },
-  {
-    key: "0x4",
-    value: "Rinkeby Testnet",
-    icon: <ETHLogo />,
-  },
-  {
     key: "0x2a",
     value: "Kovan Testnet",
     icon: <ETHLogo />,
-  },
-  {
-    key: "0x5",
-    value: "Goerli Testnet",
-    icon: <ETHLogo />,
-  },
-  {
-    key: "0x38",
-    value: "Binance",
-    icon: <BSCLogo />,
   },
   {
     key: "0x61",
@@ -62,37 +32,28 @@ const menuItems = [
     icon: <BSCLogo />,
   },
   {
-    key: "0x89",
-    value: "Polygon",
-    icon: <PolygonLogo />,
-  },
-  {
     key: "0x13881",
     value: "Mumbai",
     icon: <PolygonLogo />,
   },
   {
-    key: "0xa86a",
-    value: "Avalanche",
+    key: "0xa869",
+    value: "Avalanche Fuji",
     icon: <AvaxLogo />,
   },
 ];
 
 function Chains() {
-  const { switchNetwork, chainId, chain } = useChain();
+  const { switchNetwork, chainId } = useChain();
   const [selected, setSelected] = useState({});
-
-  console.log("chain", chain)
 
   useEffect(() => {
     if (!chainId) return null;
     const newSelected = menuItems.find((item) => item.key === chainId);
     setSelected(newSelected);
-    console.log("current chainId: ", chainId);
   }, [chainId]);
 
   const handleMenuClick = (e) => {
-    console.log("switch to: ", e.key);
     switchNetwork(e.key);
   };
 
@@ -109,7 +70,11 @@ function Chains() {
   return (
     <div>
       <Dropdown overlay={menu} trigger={["click"]}>
-        <Button key={selected?.key} icon={selected?.icon} style={{ ...styles.button, ...styles.item }}>
+        <Button
+          key={selected?.key}
+          icon={selected?.icon}
+          style={{ ...styles.button, ...styles.item }}
+        >
           <span style={{ marginLeft: "5px" }}>{selected?.value}</span>
           <DownOutlined />
         </Button>
