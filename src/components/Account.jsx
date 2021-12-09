@@ -24,21 +24,23 @@ const styles = {
 };
 
 function Account() {
-  const { authenticate, isAuthenticated, logout, account, chainId } = useMoralis();
+  const { authenticate, isAuthenticated, logout, account, chainId } =
+    useMoralis();
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  if (!isAuthenticated) {
-    return (
-      <div style={styles.account} onClick={() => authenticate({ signingMessage: "Hello World!" })}>
-        <p style={styles.text}>Authenticate</p>
-      </div>
-    );
-  }
-
-  return (
+  return !isAuthenticated ? (
+    <div
+      style={styles.account}
+      onClick={() => authenticate({ signingMessage: "Hello World!" })}
+    >
+      <p style={styles.text}>Authenticate</p>
+    </div>
+  ) : (
     <>
       <div style={styles.account} onClick={() => setIsModalVisible(true)}>
-        <p style={{ marginRight: "5px", ...styles.text }}>{getEllipsisTxt(account, 6)}</p>
+        <p style={{ marginRight: "5px", ...styles.text }}>
+          {getEllipsisTxt(account, 6)}
+        </p>
         <Blockie currentWallet scale={3} />
       </div>
       <Modal
@@ -61,9 +63,18 @@ function Account() {
           }}
           bodyStyle={{ padding: "15px" }}
         >
-          <Address avatar="left" size={6} copyable style={{ fontSize: "20px" }} />
+          <Address
+            avatar="left"
+            size={6}
+            copyable
+            style={{ fontSize: "20px" }}
+          />
           <div style={{ marginTop: "10px", padding: "0 10px" }}>
-            <a href={`${getExplorer(chainId)}/address/${account}`} target="_blank" rel="noreferrer">
+            <a
+              href={`${getExplorer(chainId)}/address/${account}`}
+              target="_blank"
+              rel="noreferrer"
+            >
               <SelectOutlined style={{ marginRight: "5px" }} />
               View on Explorer
             </a>

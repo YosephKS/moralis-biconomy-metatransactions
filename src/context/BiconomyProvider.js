@@ -3,6 +3,7 @@ import { createContext, useEffect, useState, useMemo } from "react";
 import { useChain, useMoralis } from "react-moralis";
 import { Biconomy } from "@biconomy/mexa";
 import Web3 from "web3";
+import { notification } from "antd";
 import { networkConfigs } from "helpers/networks";
 import simpleStorageContract from "contracts/SimpleStorage.json";
 import simpleStorage from "list/simpleStorage.json";
@@ -61,10 +62,15 @@ const BiconomyContextProvider = (props) => {
         })
         .onEvent(biconomy.ERROR, () => {
           // Handle error while initializing mexa
+          notification.error({
+            message: "Biconomy Initialization Fail",
+            description:
+              "Biconomy has failed to initialized. Please try again later.",
+          });
         });
     };
 
-    if (isAuthenticated && isWeb3Enabled && chainId) {
+    if (isAuthenticated && isWeb3Enabled && chainId !== "0x1") {
       initializeBiconomy();
     }
   }, [

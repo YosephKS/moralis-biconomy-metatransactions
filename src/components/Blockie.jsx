@@ -10,11 +10,15 @@ import { useMoralis } from "react-moralis";
 
 function Blockie(props) {
   const { account } = useMoralis();
-  if (!props.address && !account) return <Skeleton.Avatar active size={40} />;
-
-  return (
+  return !props.address && !account ? (
+    <Skeleton.Button active size={40} />
+  ) : (
     <Blockies
-      seed={props.currentWallet ? account.toLowerCase() : props.address.toLowerCase()}
+      seed={
+        props.currentWallet
+          ? account?.toLowerCase()
+          : props?.address?.toLowerCase()
+      }
       className="identicon"
       {...props}
     />
