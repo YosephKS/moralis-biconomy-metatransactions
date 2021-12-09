@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useMoralis, ByMoralis } from "react-moralis";
+import { ByMoralis } from "react-moralis";
 import {
   BrowserRouter as Router,
   Switch,
@@ -14,7 +13,6 @@ import NativeBalance from "components/NativeBalance";
 import "./style.css";
 import Text from "antd/lib/typography/Text";
 import Contract from "components/Contract";
-const { Header, Footer } = Layout;
 
 const styles = {
   content: {
@@ -40,24 +38,13 @@ const styles = {
   },
   headerRight: {
     display: "flex",
-    gap: "0.5rem",
+    gap: "1rem",
     alignItems: "center",
     fontSize: "15px",
     fontWeight: "600",
   },
 };
 const App = () => {
-  const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading } =
-    useMoralis();
-
-  useEffect(() => {
-    // const enableBiconomy = async () => {}
-    if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) {
-      enableWeb3();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated, isWeb3Enabled]);
-
   return (
     <Layout
       style={{
@@ -69,14 +56,14 @@ const App = () => {
       }}
     >
       <Router>
-        <Header style={styles.header}>
+        <Layout.Header style={styles.header}>
           <Logo />
           <div style={styles.headerRight}>
             <Chains />
             <NativeBalance />
             <Account />
           </div>
-        </Header>
+        </Layout.Header>
         <div style={styles.content}>
           <Switch>
             <Route exact path="/">
@@ -88,7 +75,7 @@ const App = () => {
           </Switch>
         </div>
       </Router>
-      <Footer
+      <Layout.Footer
         style={{
           textAlign: "center",
           display: "flex",
@@ -132,7 +119,7 @@ const App = () => {
             </a>
           </Text>
         </div>
-      </Footer>
+      </Layout.Footer>
     </Layout>
   );
 };

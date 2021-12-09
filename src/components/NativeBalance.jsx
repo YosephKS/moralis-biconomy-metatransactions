@@ -1,11 +1,15 @@
-import { useNativeBalance } from "react-moralis";
+import { useChain, useMoralis, useNativeBalance } from "react-moralis";
+import { getNativeByChain } from "helpers/networks";
 
 function NativeBalance(props) {
-  const { data: balance } = useNativeBalance(props);
+  const { Moralis } = useMoralis();
+  const { chainId } = useChain();
+  const { data } = useNativeBalance(props);
+  const { balance } = data ?? {};
 
   return (
     <div style={{ textAlign: "center", whiteSpace: "nowrap" }}>
-      {balance.formatted}
+      {Moralis.Units.FromWei(balance).toFixed(2)} {getNativeByChain(chainId)}
     </div>
   );
 }

@@ -3,6 +3,7 @@ export const networkConfigs = {
     chainName: "Kovan",
     currencyName: "ETH",
     currencySymbol: "ETH",
+    rpcUrl: `https://speedy-nodes-nyc.moralis.io/${process.env.REACT_APP_MORALIS_SPEEDY_NODES_KEY}/eth/kovan`,
     blockExplorerUrl: "https://kovan.etherscan.io/",
   },
   "0xa869": {
@@ -10,7 +11,7 @@ export const networkConfigs = {
     chainName: "Avalanche Fuji",
     currencyName: "AVAX",
     currencySymbol: "AVAX",
-    rpcUrl: "https://api.avax.network/ext/bc/C/rpc",
+    rpcUrl: `https://speedy-nodes-nyc.moralis.io/${process.env.REACT_APP_MORALIS_SPEEDY_NODES_KEY}/avalanche/testnet`,
     blockExplorerUrl: "https://testnet.snowtrace.io/",
   },
   "0x61": {
@@ -18,7 +19,7 @@ export const networkConfigs = {
     chainName: "Smart Chain - Testnet",
     currencyName: "BNB",
     currencySymbol: "BNB",
-    rpcUrl: "https://data-seed-prebsc-1-s1.binance.org:8545/",
+    rpcUrl: `https://speedy-nodes-nyc.moralis.io/${process.env.REACT_APP_MORALIS_SPEEDY_NODES_KEY}/bsc/testnet`,
     blockExplorerUrl: "https://testnet.bscscan.com/",
   },
   "0x13881": {
@@ -26,7 +27,7 @@ export const networkConfigs = {
     chainName: "Mumbai",
     currencyName: "MATIC",
     currencySymbol: "MATIC",
-    rpcUrl: "https://rpc-mumbai.matic.today/",
+    rpcUrl: `https://speedy-nodes-nyc.moralis.io/${process.env.REACT_APP_MORALIS_SPEEDY_NODES_KEY}/polygon/mumbai`,
     blockExplorerUrl: "https://mumbai.polygonscan.com/",
   },
 };
