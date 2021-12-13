@@ -4,9 +4,9 @@ import {
   Input,
   Typography,
   Skeleton,
-  notification,
   Button,
   Select,
+  notification,
 } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import simpleStorageContract from "contracts/SimpleStorage.json";
@@ -15,42 +15,54 @@ import { useMoralis, useChain } from "react-moralis";
 import simpleStorage from "list/simpleStorage.json";
 import { useAPIContract } from "hooks/useAPIContract";
 import useBiconomyContext from "hooks/useBiconomyContext";
+import useMetaTransaction from "hooks/useMetaTransaction";
 
 export default function Contract() {
   const { isInitialized, isWeb3Enabled, account } = useMoralis();
   const { chainId } = useChain();
-  const { isBiconomyInitialized, biconomyProvider, contract } =
-    useBiconomyContext();
+  const { isBiconomyInitialized, biconomyProvider } = useBiconomyContext();
   const { contractName, abi } = simpleStorageContract;
   const [isEdit, setIsEdit] = useState(false);
-  const [isMetatransactionProcessing, setIsMetatransactionProcessing] =
-    useState(false);
   const initialStorageForm = { value: "", signatureType: "" };
   const [storageForm, setStorageForm] = useState(initialStorageForm);
   const contractAddress = useMemo(() => simpleStorage[chainId], [chainId]);
 
+  /**
+   * @description For getting storage data from smart contracts (params defined below);
+   */
   const { runContractFunction, contractResponse, isLoading } = useAPIContract();
 
-  const onSubmitMetaTransaction = () => {
-    try {
-      setIsMetatransactionProcessing(true);
-      let tx = contract.methods.setStorage(storageForm.value).send({
+  const { isMetatransactionProcessing, onSubmitMetaTransaction } =
+    useMetaTransaction({
+      input: storageForm.value,
+      transactionParams: {
         from: account,
-        signatureType: biconomyProvider.PERSONAL_SIGN,
-      });
+        signatureType: biconomyProvider[storageForm.signatureType],
+      },
+    });
 
-      tx.on("transactionHash", function () {})
-        .once("confirmation", function () {
-          setIsMetatransactionProcessing(false);
+  const onGetStorage = ({ onSuccess, onError, onComplete }) => {
+    runContractFunction({
+      params: {
+        chain: chainId,
+        function_name: "getStorage",
+        abi,
+        address: contractAddress,
+      },
+      onSuccess,
+      onError,
+      onComplete,
+    });
+  };
+
+  const onSubmit = async (e) => {
+    await e.preventDefault();
+    if (isEdit) {
+      onSubmitMetaTransaction({
+        onConfirmation: () => {
           setIsEdit(false);
           setStorageForm(initialStorageForm);
-          runContractFunction({
-            params: {
-              chain: chainId,
-              function_name: "getStorage",
-              abi,
-              address: contractAddress,
-            },
+          onGetStorage({
             onSuccess: () => {
               notification.success({
                 message: "Metatransaction Successful",
@@ -58,32 +70,23 @@ export default function Contract() {
               });
             },
           });
-        })
-        .on("error", function () {
-          setIsMetatransactionProcessing(false);
+        },
+        onError: () => {
           notification.error({
             message: "Metatransaction Fail",
             description:
               "Your metatransaction has failed. Please try again later.",
           });
-        });
-    } catch (e) {
-      notification.error({
-        message: "Metatransaction Fail",
-        description: "Your metatransaction has failed. Please try again later.",
+        },
       });
+    } else {
+      setIsEdit(true);
     }
   };
 
   useEffect(() => {
     if (isInitialized && isWeb3Enabled) {
-      runContractFunction({
-        params: {
-          chain: chainId,
-          function_name: "getStorage",
-          abi,
-          address: contractAddress,
-        },
+      onGetStorage({
         onSuccess: () => {
           // Reinitialize everything
           setIsEdit(false);
@@ -91,14 +94,7 @@ export default function Contract() {
         },
       });
     }
-  }, [
-    isInitialized,
-    isWeb3Enabled,
-    contractAddress,
-    abi,
-    chainId,
-    runContractFunction,
-  ]);
+  }, [isInitialized, isWeb3Enabled, contractAddress, abi, chainId]);
 
   return (
     <Card
@@ -111,16 +107,7 @@ export default function Contract() {
         textAlign: "center",
       }}
     >
-      <form
-        onSubmit={async (e) => {
-          await e.preventDefault();
-          if (isEdit) {
-            onSubmitMetaTransaction();
-          } else {
-            setIsEdit(true);
-          }
-        }}
-      >
+      <form onSubmit={onSubmit}>
         <div
           style={{
             display: "flex",
@@ -202,12 +189,15 @@ export default function Contract() {
                       value={storageForm.signatureType}
                       size="large"
                       style={{ height: "45px", width: "100%" }}
+                      disabled={isMetatransactionProcessing}
                       onChange={(val) =>
                         setStorageForm({ ...storageForm, signatureType: val })
                       }
                     >
-                      <Select.Option value="EIP712">EIP712</Select.Option>
-                      <Select.Option value="Personal">Personal</Select.Option>
+                      <Select.Option value="EIP712_SIGN">EIP712</Select.Option>
+                      <Select.Option value="PERSONAL_SIGN">
+                        Personal
+                      </Select.Option>
                     </Select>
                   </>
                 )}
