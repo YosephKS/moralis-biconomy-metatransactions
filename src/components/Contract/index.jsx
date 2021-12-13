@@ -32,6 +32,13 @@ export default function Contract() {
    */
   const { runContractFunction, contractResponse, isLoading } = useAPIContract();
 
+  /**
+   * @description For executing meta transaction
+   *
+   * @param {String} input - New storage data
+   * @param {Address} transactionParams.from - address that will sign the metatransaction
+   * @param {String} transactionParams.signatureType - either EIP712_SIGN or PERSONAL_SIGN
+   */
   const { isMetatransactionProcessing, onSubmitMetaTransaction } =
     useMetaTransaction({
       input: storageForm.value,
@@ -41,6 +48,13 @@ export default function Contract() {
       },
     });
 
+  /**
+   * @description Execute `getStorage` call from smart contract
+   *
+   * @param {Function} onSuccess - success callback function
+   * @param {Function} onError - error callback function
+   * @param {Function} onComplete -complete callback function
+   */
   const onGetStorage = ({ onSuccess, onError, onComplete }) => {
     runContractFunction({
       params: {
@@ -55,6 +69,12 @@ export default function Contract() {
     });
   };
 
+  /**
+   * @description if `isEdit` is true, execute meta transaction,
+   * otherwise set `isEdit` to true
+   *
+   * @param {*} e
+   */
   const onSubmit = async (e) => {
     await e.preventDefault();
     if (isEdit) {
@@ -85,6 +105,12 @@ export default function Contract() {
   };
 
   useEffect(() => {
+    /**
+     * Running when one of the following conditions fulfilled:
+     * - Moralis SDK is Initialized
+     * - Web3 has been enabled
+     * - Connected Chain Changed
+     */
     if (isInitialized && isWeb3Enabled) {
       onGetStorage({
         onSuccess: () => {

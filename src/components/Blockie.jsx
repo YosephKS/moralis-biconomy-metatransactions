@@ -1,4 +1,4 @@
-import { Skeleton } from "antd";
+import { Spin } from "antd";
 import Blockies from "react-blockies";
 import { useMoralis } from "react-moralis";
 
@@ -11,7 +11,15 @@ import { useMoralis } from "react-moralis";
 function Blockie(props) {
   const { account } = useMoralis();
   return !props.address && !account ? (
-    <Skeleton.Button active size={40} />
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Spin />
+    </div>
   ) : (
     <Blockies
       seed={
