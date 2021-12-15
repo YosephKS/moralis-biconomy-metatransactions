@@ -21,8 +21,7 @@ git clone https://github.com/YosephKS/moralis-biconomy-metatransactions.git
 cd moralis-biconomy-metatransactions
 yarn install 
 ```
-✏ Rename `.env.example` to `.env` in the main folder and provide your `appId` and `serverUrl` from Moralis ([How to start Moralis Server](https://docs.moralis.io/moralis-server/getting-started/create-a-moralis-server)), plus some other Biconomy API Keys
-Example:
+✏ Rename `.env.example` to `.env` in the main folder and provide your `appId` and `serverUrl` from Moralis ([How to start Moralis Server](https://docs.moralis.io/moralis-server/getting-started/create-a-moralis-server)), plus some other Biconomy API Keys:
 ```jsx
 REACT_APP_MORALIS_APPLICATION_ID=xxx
 REACT_APP_MORALIS_SERVER_URL=xxx
